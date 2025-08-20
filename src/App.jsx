@@ -1,11 +1,10 @@
 import Home from "./pages/Home";
-import "./App.css";
+import  "./css/App.css";
 import { Routes, Route } from "react-router-dom";
 import Favorite from "./pages/Favorite";
 import NavBar from "./components/NavBar";
 
 function App() {
-  const movieNumber = 1;
 
   return (
     <div>
