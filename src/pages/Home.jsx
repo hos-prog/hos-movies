@@ -2,6 +2,7 @@ import MovieCard from "../components/MovieCard";
 import { useState, useEffect } from "react";
 import { searchMovies, getPopularMovies } from "../services/api";
 import "../css/Home.css";
+import { Await } from "react-router-dom";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,7 +28,23 @@ function Home() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    alert(searchQuery);
+    if (!searchQuery.trim()) return
+    if (loading) return 
+
+    setLoading(true)
+    try{
+      const serachResults =  searchMovies(searchQuery)
+      setMovies(serachResults)
+      setError(null)
+
+    }catch (err){
+      console.log(err)
+      setError("Failed to search movies ...")
+    }finally{
+       setLoading(false)
+    }
+
+
     setSearchQuery("-----");
   };
 
@@ -46,15 +63,20 @@ function Home() {
           search
         </button>
       </form>
+        
+        {error && <div className="error-message">{error}</div>}
 
-      <div className="movie-grid">
-        {movies.map((movie) => (
-          <MovieCard movie={movie} key={movie.id} />
-        ))}
-      </div>
+      {loading ? (
+        <div className="loading"> Loading...</div>
+      ) : (
+        <div className="movie-grid">
+          {movies.map((movie) => (
+            <MovieCard movie={movie} key={movie.id} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
 export default Home;
-
